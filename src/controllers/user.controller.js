@@ -43,3 +43,21 @@ exports.deleteUser = async (req, res) => {
         res.send('OK');
     });
 };
+
+exports.login = async (req, res) => {
+    User.findOne({email: req.body.email}, (err, user) => {
+        if (err) {
+            throw err;
+        }
+     
+        // test a matching password
+        user.comparePassword(req.body.password, function(err, isMatch) {
+            if (err) {
+                throw err;
+            }
+            console.log(`Password: ${req.body.password}`, isMatch);
+            //TODO: update last login timestamp
+            //TODO: create session with client
+        });
+    });
+};

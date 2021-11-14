@@ -28,6 +28,7 @@ mongoose.connection.on('error', err => console.log(`DB Connection Error ${err}`)
 
 
 //use routes
+//TODO: add middleware to protect routes so user admin do some actions
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
