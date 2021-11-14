@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const { MongoMissingCredentialsError } = require('mongodb');
+const mongoose = require('mongoose');
 
 //routes
 var indexRouter = require('./src/routes/index');
@@ -17,6 +17,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//register mongoose
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+	.then(() => {
+		console.log('DB my_page Connected')
+	});
+
+mongoose.connection.on('error', err => console.log(`DB Connection Error ${err}`));
+
 
 //use routes
 app.use('/', indexRouter);
@@ -35,7 +44,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(err);
 });
 
 module.exports = app;

@@ -23,15 +23,15 @@ const userSchema = new mongoose.Schema({
     },
     date_created: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     last_login: {
         type: Date,
-        required: true
+        default: Date.now
     },
 });
 
-userSchema.pre('save', (next) => {
+userSchema.pre('save', function(next) {
     let user = this;
     //if not pw not modified -> continue
     if (!user.isModified('password')) {
@@ -39,7 +39,7 @@ userSchema.pre('save', (next) => {
     }
 
     //generate salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, (err, hash) => {
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, hash) {
         if (err) {
             return next(err);
         }
